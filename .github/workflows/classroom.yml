@@ -25,7 +25,10 @@ jobs:
         command: |
             REPO="${{ github.repository }}"
             REPO="${REPO##*/}"
-            STUDENT="${REPO##*-}"
+
+            # Strip trailing -<number> only
+            STUDENT="$(echo "$REPO" | sed -E 's/-[0-9]+$//')"
+
             COUNT=$(git log main --author="$STUDENT" --pretty=oneline | wc -l | tr -d ' ')
             echo "Student: $STUDENT"
             echo "Commit count on main: $COUNT"
